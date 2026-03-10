@@ -1,0 +1,17 @@
+{
+  "coverage": {
+    "Boiler": 17.7,
+    "Chiller": 27.1,
+    "HVAC": 30.1,
+    "Air Compressor": 12.95,
+    "Vacuum Machine": 35.3,
+    "Power Distribution": 100.0,
+    "Water Supply": 28.15
+  },
+  "accuracy": {
+    "expert": 0.9604761904761905,
+    "llm": 0.9174285714285715,
+    "hybrid": 0.945047619047619
+  },
+  "total_samples": 10500
+}
