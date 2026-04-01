@@ -89,9 +89,6 @@ A **neuro-symbolic** framework for industrial equipment fault diagnosis that com
 │   ├── partial_fault_experiment.py # Incipient fault detection experiment (12,245 samples)
 │   ├── compute_metrics.py          # Macro-averaged P/R/F1, sensitivity analysis, ECE
 │   ├── plot_results.py             # Basic visualization (coverage & accuracy bar charts)
-│   ├── generate_advanced_plots.py  # Advanced plots (radar, heatmap, KDE, dual-axis)
-│   ├── generate_confusion_matrices.py  # Per-equipment confusion matrix heatmaps
-│   ├── analyze_results.py          # Quick per-equipment accuracy summary
 │   └── experiment_outputs/         # Generated experiment results
 │       ├── metrics.json
 │       ├── comprehensive_metrics.json
