@@ -1,0 +1,92 @@
+{
+  "Boolean (100%)": {
+    "normal": {
+      "total": 6930,
+      "expert_correct": 6656,
+      "hybrid_correct": 5627,
+      "expert_acc": 0.9605,
+      "hybrid_acc": 0.812
+    },
+    "fault": {
+      "total": 3570,
+      "expert_correct": 3131,
+      "hybrid_correct": 3376,
+      "expert_acc": 0.877,
+      "hybrid_acc": 0.9457
+    },
+    "partial_fault": {
+      "total": 1745,
+      "expert_correct": 4,
+      "hybrid_correct": 948,
+      "expert_acc": 0.0023,
+      "hybrid_acc": 0.5433
+    },
+    "overall": {
+      "total": 12245,
+      "expert_correct": 9791,
+      "hybrid_correct": 9951,
+      "expert_acc": 0.7996,
+      "hybrid_acc": 0.8127
+    }
+  },
+  "PMS-75%": {
+    "normal": {
+      "total": 6930,
+      "expert_correct": 6656,
+      "hybrid_correct": 5689,
+      "expert_acc": 0.9605,
+      "hybrid_acc": 0.8209
+    },
+    "fault": {
+      "total": 3570,
+      "expert_correct": 3131,
+      "hybrid_correct": 3391,
+      "expert_acc": 0.877,
+      "hybrid_acc": 0.9499
+    },
+    "partial_fault": {
+      "total": 1745,
+      "expert_correct": 4,
+      "hybrid_correct": 967,
+      "expert_acc": 0.0023,
+      "hybrid_acc": 0.5542
+    },
+    "overall": {
+      "total": 12245,
+      "expert_correct": 9791,
+      "hybrid_correct": 10047,
+      "expert_acc": 0.7996,
+      "hybrid_acc": 0.8205
+    }
+  },
+  "PMS-50%": {
+    "normal": {
+      "total": 6930,
+      "expert_correct": 1223,
+      "hybrid_correct": 1049,
+      "expert_acc": 0.1765,
+      "hybrid_acc": 0.1514
+    },
+    "fault": {
+      "total": 3570,
+      "expert_correct": 3229,
+      "hybrid_correct": 3321,
+      "expert_acc": 0.9045,
+      "hybrid_acc": 0.9303
+    },
+    "partial_fault": {
+      "total": 1745,
+      "expert_correct": 648,
+      "hybrid_correct": 789,
+      "expert_acc": 0.3713,
+      "hybrid_acc": 0.4521
+    },
+    "overall": {
+      "total": 12245,
+      "expert_correct": 5100,
+      "hybrid_correct": 5159,
+      "expert_acc": 0.4165,
+      "hybrid_acc": 0.4213
+    }
+  }
+}
