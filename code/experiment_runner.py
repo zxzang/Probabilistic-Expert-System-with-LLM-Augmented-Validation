@@ -21,6 +21,7 @@ visualisation module (`plot_results.py`) once it is implemented.
 
 import json
 import csv
+import random
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
 
@@ -68,6 +69,8 @@ def f1_score(prec: float, rec: float) -> float:
 # ---------------------------------------------------------------------
 
 def main() -> None:
+    random.seed(42)
+
     # 1️⃣ Coverage analysis
     coverage_analyzer = CoverageAnalyzer(samples_per_eq=2000)
     coverage = coverage_analyzer.estimate_coverage()
@@ -76,7 +79,8 @@ def main() -> None:
         print(f"  {eq}: {pct}%")
 
     # 2️⃣ Synthetic data generation
-    generator = SyntheticDataGenerator(samples_per_eq=500, noise_levels=(0.0, 0.05, 0.10))
+    generator = SyntheticDataGenerator(samples_per_eq=500, noise_levels=(0.0, 0.05, 0.10),
+                                        partial_ratio=0.0)  # no partial faults in main experiment
     dataset = generator.generate()
     print(f"Generated {len(dataset)} synthetic samples.")
 

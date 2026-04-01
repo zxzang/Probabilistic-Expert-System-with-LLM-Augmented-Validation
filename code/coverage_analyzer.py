@@ -37,43 +37,56 @@ class CoverageAnalyzer:
         heuristically chosen based on typical operating limits.
     """
 
-    def __init__(self, samples_per_eq: int = 5000) -> None:
+    def __init__(self, samples_per_eq: int = 2000) -> None:
         self.kb = KnowledgeBase()
         self.samples_per_eq = samples_per_eq
         # Define generic ranges; these can be refined later.
         self.param_ranges: Dict[str, Dict[str, Tuple[float, float]]] = {
             "Boiler": {
-                "pressure": (10, 150),  # bar
-                "temperature": (100, 450),  # °C
+                "pressure": (10, 150),
+                "temperature": (100, 450),
+                "gas_flow": (50, 500),
+                "steam_flow": (100, 800),
+                "water_level": (30, 90),
             },
             "Chiller": {
-                "evap_temp": (0, 25),  # °C
-                "compressor_current": (5, 25),  # A
-                "coolant_flow": (5, 30),  # L/min
+                "compressor_current": (5, 25),
+                "coolant_flow": (5, 30),
+                "chilled_water_out_temp": (4, 15),
+                "cooling_water_in_temp": (20, 40),
             },
             "HVAC": {
                 "indoor_temp": (15, 35),
-                "outdoor_temp": (-30, 45),
                 "indoor_humidity": (20, 80),
+                "supply_temp": (10, 30),
+                "fan_power": (0.5, 5.0),
+                "coil_delta_t": (2, 12),
             },
             "Air Compressor": {
                 "inlet_pressure": (30, 120),
                 "discharge_pressure": (80, 200),
                 "temperature": (20, 100),
+                "motor_current": (5, 50),
+                "gas_production": (2, 20),
             },
             "Vacuum Machine": {
-                "vacuum_level": (-800, -100),  # Pa (negative)
+                "vacuum_level": (-800, -100),
                 "motor_current": (2, 15),
+                "power_consumption": (5, 40),
+                "production_rate": (10, 100),
             },
             "Power Distribution": {
                 "voltage": (190, 250),
                 "current": (10, 200),
-                "frequency": (45, 55),
+                "power_factor": (0.6, 1.0),
+                "phase_imbalance": (0, 30),
             },
             "Water Supply": {
                 "pressure": (20, 120),
                 "flow_rate": (1, 20),
                 "temperature": (5, 60),
+                "pump_current": (3, 30),
+                "water_elec_ratio": (0.5, 5.0),
             },
         }
 

@@ -26,12 +26,12 @@ class SimulatedLLM:
     accuracy : float, default 0.85
         Probability that the LLM returns the *correct* fault label when the
         ground‑truth fault is known.
-    hallucination_rate : float, default 0.05
+    hallucination_rate : float, default 0.15
         Probability that the LLM returns an unrelated fault (simulating a
         hallucination).
     """
 
-    def __init__(self, accuracy: float = 0.85, hallucination_rate: float = 0.05):
+    def __init__(self, accuracy: float = 0.85, hallucination_rate: float = 0.15):
         self.accuracy = max(0.0, min(1.0, accuracy))
         self.hallucination_rate = max(0.0, min(1.0, hallucination_rate))
         # A small pool of plausible but generic fault strings for hallucinations
@@ -60,14 +60,10 @@ class SimulatedLLM:
             # Correct answer (may be None for normal operation)
             fault = ground_truth
             confidence = base_confidence
-        elif roll < self.accuracy + self.hallucination_rate:
+        else:
             # Hallucination – pick unrelated fault
             fault = random.choice(self.generic_faults)
             confidence = base_confidence * 0.5
-        else:
-            # Uncertain – return None (LLM could not decide)
-            fault = None
-            confidence = base_confidence * 0.4
         return fault, round(confidence, 3)
 
 
@@ -78,7 +74,7 @@ class LLMBaseline:
     mirrors the signature of the expert‑system inference engine.
     """
 
-    def __init__(self, accuracy: float = 0.85, hallucination_rate: float = 0.05):
+    def __init__(self, accuracy: float = 0.85, hallucination_rate: float = 0.15):
         self.llm = SimulatedLLM(accuracy, hallucination_rate)
         self.kb = KnowledgeBase()
 
