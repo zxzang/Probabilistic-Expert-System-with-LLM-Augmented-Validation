@@ -3,7 +3,7 @@
 > **Enhancing Industrial Fault Diagnosis: A Probabilistic Expert System with LLM‑Augmented Validation**
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 A **neuro-symbolic** framework for industrial equipment fault diagnosis that combines a deterministic, physics-grounded rule-based expert system with a Large Language Model (LLM) fallback mechanism. The system achieves high diagnostic accuracy while maintaining full interpretability — critical for mission-critical manufacturing operations.
 
