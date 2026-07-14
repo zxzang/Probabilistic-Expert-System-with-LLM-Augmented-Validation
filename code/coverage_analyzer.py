@@ -11,7 +11,8 @@ approach:
 2. Randomly sample a large number of parameter vectors within those ranges.
 3. Discard samples that violate physical constraints (using
    ``KnowledgeBase.is_feasible``).
-4. Count the fraction of feasible samples that trigger at least one rule.
+4. Count the fraction of feasible samples where at least one rule condition
+   is satisfied, i.e., the paper's S_conf > 0 coverage criterion.
 
 The ``CoverageAnalyzer`` class provides ``estimate_coverage`` which returns a
 dictionary mapping equipment names to coverage percentages.
@@ -37,9 +38,11 @@ class CoverageAnalyzer:
         heuristically chosen based on typical operating limits.
     """
 
-    def __init__(self, samples_per_eq: int = 2000) -> None:
+    def __init__(self, samples_per_eq: int = 2000, seed: int = 42) -> None:
         self.kb = KnowledgeBase()
         self.samples_per_eq = samples_per_eq
+        self.seed = seed
+        self.rng = random.Random(seed)
         # Define generic ranges; these can be refined later.
         self.param_ranges: Dict[str, Dict[str, Tuple[float, float]]] = {
             "Boiler": {
@@ -99,21 +102,20 @@ class CoverageAnalyzer:
         ranges = self.param_ranges.get(equipment, {})
         sample: Dict[str, float] = {}
         for param, (low, high) in ranges.items():
-            sample[param] = random.uniform(low, high)
+            sample[param] = self.rng.uniform(low, high)
         return sample
 
     def _has_matching_rule(self, equipment: str, params: Dict[str, Any]) -> bool:
-        """Return True if at least one rule matches the supplied *params*.
-        """
+        """Return True when any rule has a positive partial match."""
         for rule in self.kb.get_rules(equipment):
-            if rule.matches(params):
+            if rule.count_matched(params) > 0:
                 return True
         return False
 
     # ---------------------------------------------------------------------
     # Public API
     # ---------------------------------------------------------------------
-    def estimate_coverage(self) -> Dict[str, float]:
+    def estimate_coverage(self, seed: int | None = None) -> Dict[str, float]:
         """Estimate coverage for each equipment type.
 
         Returns
@@ -122,6 +124,9 @@ class CoverageAnalyzer:
             Mapping ``equipment -> coverage_percent`` where the percentage is the
             proportion of feasible random samples that trigger at least one rule.
         """
+        if seed is not None:
+            self.seed = seed
+            self.rng.seed(seed)
         coverage: Dict[str, float] = {}
         for equipment in self.kb.equipment_types:
             total_feasible = 0

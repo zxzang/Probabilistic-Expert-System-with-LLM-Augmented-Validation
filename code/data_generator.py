@@ -8,6 +8,7 @@ Generates samples with configurable noise levels. Each sample includes:
 """
 
 import random
+import warnings
 from typing import List, Dict, Any, Tuple
 
 from knowledge_base import KnowledgeBase, Rule
@@ -101,6 +102,18 @@ class SyntheticDataGenerator:
             noisy[k] = random.gauss(v, sigma)
         return noisy
 
+    def _clip_to_ranges(self, equipment: str, params: Dict[str, float]) -> Dict[str, float]:
+        """Clamp noisy parameters to the configured physically plausible range."""
+        ranges = self.param_ranges.get(equipment, {})
+        clipped: Dict[str, float] = {}
+        for key, value in params.items():
+            if key in ranges:
+                low, high = ranges[key]
+                clipped[key] = max(low, min(high, value))
+            else:
+                clipped[key] = value
+        return clipped
+
     def _find_matching_rule(self, equipment: str, params: Dict[str, Any]) -> Rule | None:
         """Return the first rule that matches the given parameters, or None."""
         for rule in self.kb.get_rules(equipment):
@@ -169,7 +182,9 @@ class SyntheticDataGenerator:
                         continue
                     rule = self._find_matching_rule(eq, raw_params)
                     fault_label = rule.fault if rule else None
-                    noisy_params = self._apply_noise(raw_params, noise)
+                    noisy_params = self._clip_to_ranges(eq, self._apply_noise(raw_params, noise))
+                    if not self.kb.is_feasible(eq, noisy_params):
+                        continue
                     dataset.append({
                         "equipment": eq,
                         "noise_level": noise,
@@ -180,12 +195,16 @@ class SyntheticDataGenerator:
 
                 # Generate partial fault samples
                 n_partial = int(self.samples_per_eq * self.partial_ratio)
+                skipped_partial = 0
                 for _ in range(n_partial):
                     rule = random.choice(rules)
                     partial_params = self._generate_partial_fault_params(rule)
                     if partial_params is None:
+                        skipped_partial += 1
                         continue
-                    noisy_params = self._apply_noise(partial_params, noise)
+                    noisy_params = self._clip_to_ranges(eq, self._apply_noise(partial_params, noise))
+                    if not self.kb.is_feasible(eq, noisy_params):
+                        continue
                     dataset.append({
                         "equipment": eq,
                         "noise_level": noise,
@@ -193,4 +212,10 @@ class SyntheticDataGenerator:
                         "fault": rule.fault,
                         "sample_type": "partial_fault",
                     })
+                if skipped_partial:
+                    warnings.warn(
+                        f"Skipped {skipped_partial} partial-fault samples for {eq} at noise={noise}; "
+                        "selected rules had fewer than two conditions.",
+                        RuntimeWarning,
+                    )
         return dataset

@@ -27,6 +27,7 @@ from collections import defaultdict
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 from data_generator import SyntheticDataGenerator
+from experiment_metrics import hybrid_decision
 from inference_engine import ProbabilisticInferenceEngine
 from llm_baseline import LLMBaseline
 
@@ -38,7 +39,7 @@ def run_experiment(dataset: List[Dict[str, Any]], min_match: float,
     Returns per-sample-type metrics for both Expert and Hybrid.
     """
     engine = ProbabilisticInferenceEngine(min_match=min_match)
-    llm = LLMBaseline()
+    llm = LLMBaseline(seed=42)
 
     counts: Dict[str, Dict[str, int]] = defaultdict(
         lambda: {"expert_ok": 0, "hybrid_ok": 0, "total": 0}
@@ -55,21 +56,10 @@ def run_experiment(dataset: List[Dict[str, Any]], min_match: float,
         expert_fault = preds[0][0] if preds else None
         expert_conf = preds[0][1] if preds else 0.0
 
-        # LLM baseline
-        llm_fault, llm_conf = llm.llm.diagnose(eq, params,
-                                                 ground_truth=true_fault)
+        # Mock LLM baseline
+        llm_fault, llm_conf = llm.diagnose(eq, params, ground_truth=true_fault)
 
-        # Hybrid decision (§3.4)
-        if expert_conf >= tau:
-            hybrid_fault = expert_fault
-        elif llm_fault is not None and expert_fault is not None:
-            expert_w = 0.7 * expert_conf
-            llm_w = 0.3 * llm_conf
-            hybrid_fault = expert_fault if expert_w >= llm_w else llm_fault
-        elif llm_fault is not None:
-            hybrid_fault = llm_fault
-        else:
-            hybrid_fault = expert_fault
+        hybrid_fault, _hybrid_conf = hybrid_decision(expert_fault, expert_conf, llm_fault, llm_conf, tau=tau)
 
         counts[stype]["total"] += 1
         if expert_fault == true_fault:

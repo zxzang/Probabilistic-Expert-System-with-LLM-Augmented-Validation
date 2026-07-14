@@ -30,6 +30,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 from coverage_analyzer import CoverageAnalyzer
 from data_generator import SyntheticDataGenerator
+from experiment_metrics import hybrid_decision
 from inference_engine import ProbabilisticInferenceEngine
 from llm_baseline import LLMBaseline
 
@@ -72,7 +73,7 @@ def main() -> None:
     random.seed(42)
 
     # 1️⃣ Coverage analysis
-    coverage_analyzer = CoverageAnalyzer(samples_per_eq=2000)
+    coverage_analyzer = CoverageAnalyzer(samples_per_eq=2000, seed=42)
     coverage = coverage_analyzer.estimate_coverage()
     print("Rule coverage percentages:")
     for eq, pct in coverage.items():
@@ -86,7 +87,7 @@ def main() -> None:
 
     # 3️⃣ Initialize inference engines
     expert_engine = ProbabilisticInferenceEngine()
-    llm_baseline = LLMBaseline()
+    llm_baseline = LLMBaseline(seed=42)
 
     # Containers for results
     results: List[Dict[str, Any]] = []
@@ -105,24 +106,11 @@ def main() -> None:
         expert_fault = expert_preds[0][0] if expert_preds else None
         expert_conf = expert_preds[0][1] if expert_preds else 0.0
 
-        # LLM baseline – pass ground truth so simulated accuracy is meaningful
-        llm_fault, llm_conf = llm_baseline.llm.diagnose(eq, params, ground_truth=true_fault)
+        # Mock LLM baseline: ground truth is used only to sample from the
+        # configured accuracy/hallucination process in a controlled simulation.
+        llm_fault, llm_conf = llm_baseline.diagnose(eq, params, ground_truth=true_fault)
 
-        # Hybrid decision per §3.4:
-        #   if expert confidence >= τ → accept expert output
-        #   if expert confidence < τ  → invoke LLM, merge with weighted average
-        tau = 0.6
-        if expert_conf >= tau:
-            hybrid_fault = expert_fault
-        elif llm_fault is not None and expert_fault is not None:
-            # Weighted merge: pick whichever has higher weighted score
-            expert_w = 0.7 * expert_conf
-            llm_w = 0.3 * llm_conf
-            hybrid_fault = expert_fault if expert_w >= llm_w else llm_fault
-        elif llm_fault is not None:
-            hybrid_fault = llm_fault
-        else:
-            hybrid_fault = expert_fault
+        hybrid_fault, hybrid_conf = hybrid_decision(expert_fault, expert_conf, llm_fault, llm_conf, tau=0.6)
 
         # Record
         results.append({
@@ -133,6 +121,7 @@ def main() -> None:
             "llm_fault": llm_fault,
             "llm_confidence": llm_conf,
             "hybrid_fault": hybrid_fault,
+            "hybrid_conf": hybrid_conf,
         })
 
         # Update counters for simple accuracy (treat None as correct when true_fault is None)
@@ -144,7 +133,8 @@ def main() -> None:
             hybrid_correct += 1
         total += 1
 
-    # 4️⃣ Compute accuracies
+    # 4️⃣ Compute simple accuracies. Run compute_metrics.py for macro-F1,
+    # per-equipment metrics, threshold sensitivity, and ECE.
     expert_acc = expert_correct / total if total else 0.0
     llm_acc = llm_correct / total if total else 0.0
     hybrid_acc = hybrid_correct / total if total else 0.0
@@ -172,7 +162,16 @@ def main() -> None:
     with csv_path.open("w", newline="", encoding="utf-8") as f_csv:
         writer = csv.DictWriter(
             f_csv,
-            fieldnames=["equipment", "true_fault", "expert_fault", "expert_conf", "llm_fault", "llm_confidence", "hybrid_fault"],
+            fieldnames=[
+                "equipment",
+                "true_fault",
+                "expert_fault",
+                "expert_conf",
+                "llm_fault",
+                "llm_confidence",
+                "hybrid_fault",
+                "hybrid_conf",
+            ],
         )
         writer.writeheader()
         writer.writerows(results)

@@ -19,6 +19,8 @@ from collections import defaultdict
 from pathlib import Path
 
 sys.path.append(os.path.dirname(__file__))
+from experiment_metrics import ece as _shared_ece
+from experiment_metrics import hybrid_decision as _shared_hybrid_decision
 
 OUTPUT_DIR = Path(__file__).parent / "experiment_outputs"
 CSV_PATH = OUTPUT_DIR / "predictions.csv"
@@ -32,12 +34,18 @@ def _normalize(val):
 
 
 def _macro_prf1(records, pred_col):
-    """Compute macro-averaged P/R/F1 over the true-label set."""
+    """Compute macro-averaged P/R/F1 over true fault labels only.
+
+    Predictions outside the closed true-fault label set are treated as
+    hallucinated/unknown diagnoses and penalized against the sample's true
+    fault class.
+    """
     # Build true label set
     true_labels = set()
     for r in records:
         tf = _normalize(r["true_fault"])
-        true_labels.add(tf)
+        if tf is not None:
+            true_labels.add(tf)
 
     # Per-class TP/FP/FN
     class_stats = {lab: {"tp": 0, "fp": 0, "fn": 0} for lab in true_labels}
@@ -45,13 +53,15 @@ def _macro_prf1(records, pred_col):
         tf = _normalize(r["true_fault"])
         pf = _normalize(r[pred_col])
         if tf == pf:
-            class_stats[tf]["tp"] += 1
+            if tf in class_stats:
+                class_stats[tf]["tp"] += 1
         else:
-            class_stats[tf]["fn"] += 1
+            if tf in class_stats:
+                class_stats[tf]["fn"] += 1
             if pf in class_stats:
                 class_stats[pf]["fp"] += 1
-            # If pf is a hallucination label not in true_labels, we ignore it
-            # for macro averaging (it doesn't inflate any class's FP)
+            elif pf is not None and tf in class_stats:
+                class_stats[tf]["fp"] += 1
 
     precisions, recalls, f1s = [], [], []
     for lab in true_labels:
@@ -71,28 +81,9 @@ def _macro_prf1(records, pred_col):
     }
 
 
-def _ece_binned(confs, corrects, n_bins=10):
-    """Compute Expected Calibration Error using equal-width binning.
-
-    Only includes samples where a diagnosis was actually produced
-    (confidence > 0), since zero-confidence entries represent "no rule
-    matched" rather than a calibrated probability estimate.
-    """
-    bins = defaultdict(lambda: {"correct": 0, "total": 0, "conf_sum": 0.0})
-    for conf, is_correct in zip(confs, corrects):
-        bin_idx = min(int(conf * n_bins), n_bins - 1)
-        bins[bin_idx]["total"] += 1
-        bins[bin_idx]["conf_sum"] += conf
-        if is_correct:
-            bins[bin_idx]["correct"] += 1
-    n = len(confs)
-    ece = 0.0
-    for b in bins.values():
-        if b["total"] > 0:
-            acc = b["correct"] / b["total"]
-            avg_conf = b["conf_sum"] / b["total"]
-            ece += (b["total"] / n) * abs(acc - avg_conf)
-    return round(ece, 3)
+def _ece_from_records(records, pred_key, conf_key):
+    """Compute ECE through the shared implementation."""
+    return round(_shared_ece(records, pred_key, conf_key), 3)
 
 
 def _hybrid_decision(expert_fault, expert_conf, llm_fault, llm_conf, tau=0.6):
@@ -100,19 +91,7 @@ def _hybrid_decision(expert_fault, expert_conf, llm_fault, llm_conf, tau=0.6):
 
     Returns (hybrid_fault, hybrid_confidence).
     """
-    if expert_conf >= tau:
-        return expert_fault, expert_conf
-    elif llm_fault is not None and expert_fault is not None:
-        ew = 0.7 * expert_conf
-        lw = 0.3 * llm_conf
-        if ew >= lw:
-            return expert_fault, expert_conf
-        else:
-            return llm_fault, llm_conf
-    elif llm_fault is not None:
-        return llm_fault, llm_conf
-    else:
-        return expert_fault, expert_conf
+    return _shared_hybrid_decision(expert_fault, expert_conf, llm_fault, llm_conf, tau=tau)
 
 
 def compute_overall_metrics():
@@ -147,18 +126,20 @@ def compute_overall_metrics():
 
     # --- ECE (only for samples where a diagnosis was produced) ---
     # Expert ECE
-    expert_confs, expert_corrects = [], []
+    expert_ece_records = []
     for r in records:
         conf = float(r["expert_conf"]) if r["expert_conf"] else 0.0
-        if conf > 0:
-            expert_confs.append(conf)
-            expert_corrects.append(
-                _normalize(r["true_fault"]) == _normalize(r["expert_fault"])
-            )
-    results["expert"]["ece"] = _ece_binned(expert_confs, expert_corrects)
+        expert_ece_records.append(
+            {
+                "true_fault": _normalize(r["true_fault"]),
+                "expert_fault": _normalize(r["expert_fault"]),
+                "expert_conf": conf,
+            }
+        )
+    results["expert"]["ece"] = _ece_from_records(expert_ece_records, "expert_fault", "expert_conf")
 
     # Hybrid ECE
-    hybrid_confs, hybrid_corrects = [], []
+    hybrid_ece_records = []
     for r in records:
         expert_conf = float(r["expert_conf"]) if r["expert_conf"] else 0.0
         llm_conf = float(r["llm_confidence"]) if r["llm_confidence"] else 0.0
@@ -166,10 +147,14 @@ def compute_overall_metrics():
             _normalize(r["expert_fault"]), expert_conf,
             _normalize(r["llm_fault"]), llm_conf,
         )
-        if hc > 0:
-            hybrid_confs.append(hc)
-            hybrid_corrects.append(_normalize(r["true_fault"]) == hf)
-    results["hybrid"]["ece"] = _ece_binned(hybrid_confs, hybrid_corrects)
+        hybrid_ece_records.append(
+            {
+                "true_fault": _normalize(r["true_fault"]),
+                "hybrid_fault": hf,
+                "hybrid_conf": hc,
+            }
+        )
+    results["hybrid"]["ece"] = _ece_from_records(hybrid_ece_records, "hybrid_fault", "hybrid_conf")
 
     return results
 
@@ -231,16 +216,11 @@ def run_sensitivity(thresholds=(0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)):
         hybrids = []
 
         for p in preds:
-            if p["expert_conf"] >= tau:
-                hf = p["expert_fault"]
-            elif p["llm_fault"] is not None and p["expert_fault"] is not None:
-                ew = 0.7 * p["expert_conf"]
-                lw = 0.3 * p["llm_conf"]
-                hf = p["expert_fault"] if ew >= lw else p["llm_fault"]
-            elif p["llm_fault"] is not None:
-                hf = p["llm_fault"]
-            else:
-                hf = p["expert_fault"]
+            hf, _ = _hybrid_decision(
+                p["expert_fault"], p["expert_conf"],
+                p["llm_fault"], p["llm_conf"],
+                tau=tau,
+            )
 
             hybrids.append(hf)
             if p["true_fault"] == hf:
@@ -257,6 +237,8 @@ def run_sensitivity(thresholds=(0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)):
         label_stats = defaultdict(lambda: {"tp": 0, "fn": 0})
         for p, hf in zip(preds, hybrids):
             tf = p["true_fault"]
+            if tf is None:
+                continue
             if tf == hf:
                 label_stats[tf]["tp"] += 1
             else:
@@ -274,17 +256,21 @@ def run_sensitivity(thresholds=(0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)):
         }
 
         # ECE for this threshold
-        hybrid_confs, hybrid_corrects = [], []
+        hybrid_ece_records = []
         for p, hf in zip(preds, hybrids):
             _, hc = _hybrid_decision(
                 p["expert_fault"], p["expert_conf"],
                 p["llm_fault"], p["llm_conf"],
                 tau=tau,
             )
-            if hc > 0:
-                hybrid_confs.append(hc)
-                hybrid_corrects.append(p["true_fault"] == hf)
-        results[tau]["ece"] = _ece_binned(hybrid_confs, hybrid_corrects)
+            hybrid_ece_records.append(
+                {
+                    "true_fault": p["true_fault"],
+                    "hybrid_fault": hf,
+                    "hybrid_conf": hc,
+                }
+            )
+        results[tau]["ece"] = _ece_from_records(hybrid_ece_records, "hybrid_fault", "hybrid_conf")
 
     return results
 
