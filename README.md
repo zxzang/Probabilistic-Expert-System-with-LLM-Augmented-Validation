@@ -123,8 +123,6 @@ The diagram shows the common expert-first flow. Controlled synthetic experiments
 │   ├── partial_fault_experiment.py # Incipient fault detection experiment (12,245 samples)
 │   ├── compute_metrics.py          # Macro-averaged P/R/F1, sensitivity analysis, ECE
 │   ├── plot_results.py             # Basic visualization (coverage & accuracy bar charts)
-│   ├── generate_advanced_plots.py  # Advanced plots (radar, heatmap, KDE, dual-axis)
-│   ├── generate_confusion_matrices.py  # Per-equipment confusion matrix heatmaps
 │   ├── analyze_results.py          # Quick per-equipment accuracy summary
 │   └── experiment_outputs/         # Generated experiment results
 │       ├── metrics.json
@@ -135,18 +133,10 @@ The diagram shows the common expert-first flow. Controlled synthetic experiments
 │       ├── public_ml_baseline_metrics.json
 │       ├── rebuttal_evidence_summary.md
 │       ├── predictions.csv
-│       ├── coverage.png
-│       ├── radar_chart.png
-│       ├── heatmap_equipment.png
-│       ├── kde_confidence.png
-│       ├── dual_axis_sensitivity.png
-│       ├── alpha_beta_hybrid_macro_f1.png
-│       ├── alpha_beta_hybrid_ece.png
-│       ├── per_equipment_confidence_hist.png
 │       ├── latency_scalability.csv
 │       ├── latency_scalability.json
-│       ├── accuracy_comparison.png
-│       └── confusion_*.png         # Per-equipment confusion matrices (×7)
+│       └──  accuracy_comparison.png
+
 ```
 
 ---
@@ -516,8 +506,6 @@ To reproduce the complete experiment suite, run the scripts in the following ord
 python code/experiment_runner.py
 python code/compute_metrics.py
 python code/plot_results.py
-python code/generate_advanced_plots.py
-python code/generate_confusion_matrices.py
 python code/partial_fault_experiment.py
 python code/hyperparameter_sensitivity.py
 python code/statistical_significance.py
@@ -577,8 +565,6 @@ Use this summary as the first checkpoint before updating the manuscript and rebu
 |---|---|
 | `compute_metrics.py` | Macro-averaged P/R/F1, fault-only accuracy, per-equipment breakdown, sensitivity analysis, and ECE computation. |
 | `plot_results.py` | Basic bar charts for coverage and accuracy comparison. |
-| `generate_advanced_plots.py` | Radar chart, dual-axis sensitivity plot, equipment heatmap, and confidence KDE plot. |
-| `generate_confusion_matrices.py` | Per-equipment confusion matrix heatmaps. |
 | `analyze_results.py` | Quick per-equipment accuracy summary from `predictions.csv`. |
 
 ---
