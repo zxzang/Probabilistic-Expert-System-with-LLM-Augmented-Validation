@@ -1,0 +1,8 @@
+scope,model,samples,train_samples,test_samples,classes,test_size,accuracy,weighted_precision,weighted_recall,weighted_f1,fault_only_accuracy,macro_precision_faults,macro_recall_faults,macro_f1_faults
+Synthetic,LogisticRegression,10500,7350,3150,30,0.3,0.526,0.8224,0.526,0.5352,0.9054,0.3324,0.9216,0.4612
+Synthetic,DecisionTree,10500,7350,3150,30,0.3,0.8981,0.8989,0.8981,0.8978,0.8277,0.7292,0.7078,0.7126
+Synthetic,RandomForest,10500,7350,3150,30,0.3,0.9206,0.9176,0.9206,0.9175,0.8455,0.7709,0.641,0.6822
+Synthetic,ExtraTrees,10500,7350,3150,30,0.3,0.8892,0.8789,0.8892,0.8771,0.7322,0.6395,0.4367,0.4908
+Synthetic,GradientBoosting,10500,7350,3150,30,0.3,0.9159,0.9162,0.9159,0.915,0.853,0.7071,0.693,0.6923
+Synthetic,MLP,10500,7350,3150,30,0.3,0.8441,0.8513,0.8441,0.8435,0.7425,0.613,0.5341,0.544
+Synthetic,XGBoost,10500,7350,3150,30,0.3,0.9197,0.9189,0.9197,0.9188,0.8633,0.743,0.7126,0.7211

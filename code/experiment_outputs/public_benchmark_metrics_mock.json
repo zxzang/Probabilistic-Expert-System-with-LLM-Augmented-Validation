@@ -1,0 +1,2024 @@
+{
+  "configuration": {
+    "llm": "mock",
+    "llm_prompt_mode": "kb-guided",
+    "hybrid_strategy": "evidence-aware",
+    "threshold_profile": "public-tuned",
+    "tau": null,
+    "min_match": null,
+    "tau_grid": "0.2,0.3,0.35,0.4,0.45,0.5,0.6",
+    "min_match_grid": "25,33.34,50,66.66,75,100",
+    "max_rows": 20000,
+    "stride": 60,
+    "max_scenarios_per_source": 12,
+    "skip_metropt": false,
+    "metropt_window_rows": 300,
+    "metropt_max_windows_per_class": 20,
+    "max_api_calls": null,
+    "seed": 42
+  },
+  "threshold_profile": {
+    "profile": "public-tuned",
+    "cli_min_match_override": null,
+    "cli_tau_override": null,
+    "calibration_note": "The public-data profile is an engineering calibration for the compact public benchmark rule base. It should be interpreted together with the exported min_match/tau sensitivity tables rather than as a universal threshold for all datasets.",
+    "by_equipment": {
+      "LBNL Boiler Plant": {
+        "min_match": 66.66,
+        "tau": 0.45,
+        "rationale": "Suppresses weak partial matches while keeping confident boiler expert diagnoses above the fallback threshold."
+      },
+      "LBNL Chiller Plant": {
+        "min_match": 66.66,
+        "tau": 0.45,
+        "rationale": "Chiller public predicates are sparse; a lower tau avoids replacing plausible expert matches with LLM guesses."
+      },
+      "LBNL RTU": {
+        "min_match": 50.0,
+        "tau": 0.5,
+        "rationale": "RTU predicates are the sparsest among LBNL sources; min_match=50 allows 2-condition rules to fire on 1/2 match."
+      },
+      "MetroPT Compressor": {
+        "min_match": 66.66,
+        "tau": 0.2,
+        "rationale": "MetroPT predicates are trend-derived and noisy; tau=0.20 limits fallback to low-confidence expert outputs while preserving most expert detections."
+      }
+    }
+  },
+  "threshold_usage": {
+    "LBNL Boiler Plant": {
+      "samples": 13,
+      "min_match_values": [
+        66.66
+      ],
+      "tau_values": [
+        0.45
+      ],
+      "fallback_rate": 0.846
+    },
+    "LBNL Chiller Plant": {
+      "samples": 13,
+      "min_match_values": [
+        66.66
+      ],
+      "tau_values": [
+        0.45
+      ],
+      "fallback_rate": 0.538
+    },
+    "LBNL RTU": {
+      "samples": 18,
+      "min_match_values": [
+        50.0
+      ],
+      "tau_values": [
+        0.5
+      ],
+      "fallback_rate": 0.611
+    },
+    "MetroPT Compressor": {
+      "samples": 60,
+      "min_match_values": [
+        66.66
+      ],
+      "tau_values": [
+        0.2
+      ],
+      "fallback_rate": 0.683
+    }
+  },
+  "expert_min_match_sensitivity": {
+    "LBNL Boiler Plant": {
+      "samples": 13,
+      "grid": {
+        "25.0": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "avg_expert_conf": 0.247
+        },
+        "33.34": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "avg_expert_conf": 0.258
+        },
+        "50.0": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "avg_expert_conf": 0.259
+        },
+        "66.66": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "avg_expert_conf": 0.296
+        },
+        "75.0": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "avg_expert_conf": 0.317
+        },
+        "100.0": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "avg_expert_conf": 0.388
+        }
+      }
+    },
+    "LBNL Chiller Plant": {
+      "samples": 13,
+      "grid": {
+        "25.0": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "avg_expert_conf": 0.428
+        },
+        "33.34": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "avg_expert_conf": 0.438
+        },
+        "50.0": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "avg_expert_conf": 0.439
+        },
+        "66.66": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "avg_expert_conf": 0.572
+        },
+        "75.0": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "avg_expert_conf": 0.61
+        },
+        "100.0": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "avg_expert_conf": 0.633
+        }
+      }
+    },
+    "LBNL RTU": {
+      "samples": 18,
+      "grid": {
+        "25.0": {
+          "accuracy": 0.611,
+          "fault_only_accuracy": 0.417,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.268,
+          "macro_recall": 0.45,
+          "macro_f1": 0.333,
+          "avg_expert_conf": 0.465
+        },
+        "33.34": {
+          "accuracy": 0.611,
+          "fault_only_accuracy": 0.417,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.268,
+          "macro_recall": 0.45,
+          "macro_f1": 0.333,
+          "avg_expert_conf": 0.467
+        },
+        "50.0": {
+          "accuracy": 0.611,
+          "fault_only_accuracy": 0.417,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.268,
+          "macro_recall": 0.45,
+          "macro_f1": 0.333,
+          "avg_expert_conf": 0.467
+        },
+        "66.66": {
+          "accuracy": 0.611,
+          "fault_only_accuracy": 0.417,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.268,
+          "macro_recall": 0.45,
+          "macro_f1": 0.333,
+          "avg_expert_conf": 0.496
+        },
+        "75.0": {
+          "accuracy": 0.611,
+          "fault_only_accuracy": 0.417,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.268,
+          "macro_recall": 0.45,
+          "macro_f1": 0.333,
+          "avg_expert_conf": 0.531
+        },
+        "100.0": {
+          "accuracy": 0.611,
+          "fault_only_accuracy": 0.417,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.268,
+          "macro_recall": 0.45,
+          "macro_f1": 0.333,
+          "avg_expert_conf": 0.556
+        }
+      }
+    },
+    "MetroPT Compressor": {
+      "samples": 60,
+      "grid": {
+        "25.0": {
+          "accuracy": 0.9,
+          "fault_only_accuracy": 0.9,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.885,
+          "macro_recall": 0.9,
+          "macro_f1": 0.879,
+          "avg_expert_conf": 0.295
+        },
+        "33.34": {
+          "accuracy": 0.9,
+          "fault_only_accuracy": 0.9,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.885,
+          "macro_recall": 0.9,
+          "macro_f1": 0.879,
+          "avg_expert_conf": 0.311
+        },
+        "50.0": {
+          "accuracy": 0.9,
+          "fault_only_accuracy": 0.9,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.885,
+          "macro_recall": 0.9,
+          "macro_f1": 0.879,
+          "avg_expert_conf": 0.312
+        },
+        "66.66": {
+          "accuracy": 0.9,
+          "fault_only_accuracy": 0.9,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.885,
+          "macro_recall": 0.9,
+          "macro_f1": 0.879,
+          "avg_expert_conf": 0.376
+        },
+        "75.0": {
+          "accuracy": 0.9,
+          "fault_only_accuracy": 0.9,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.885,
+          "macro_recall": 0.9,
+          "macro_f1": 0.879,
+          "avg_expert_conf": 0.409
+        },
+        "100.0": {
+          "accuracy": 0.9,
+          "fault_only_accuracy": 0.9,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.885,
+          "macro_recall": 0.9,
+          "macro_f1": 0.879,
+          "avg_expert_conf": 0.355
+        }
+      }
+    }
+  },
+  "tau_sensitivity": {
+    "overall": {
+      "samples": 104,
+      "grid": {
+        "0.2": {
+          "accuracy": 0.846,
+          "fault_only_accuracy": 0.816,
+          "false_alarm_rate": 0.071,
+          "macro_precision": 0.592,
+          "macro_recall": 0.645,
+          "macro_f1": 0.608,
+          "fallback_rate": 0.606
+        },
+        "0.3": {
+          "accuracy": 0.846,
+          "fault_only_accuracy": 0.816,
+          "false_alarm_rate": 0.071,
+          "macro_precision": 0.592,
+          "macro_recall": 0.645,
+          "macro_f1": 0.608,
+          "fallback_rate": 0.683
+        },
+        "0.35": {
+          "accuracy": 0.846,
+          "fault_only_accuracy": 0.816,
+          "false_alarm_rate": 0.071,
+          "macro_precision": 0.592,
+          "macro_recall": 0.645,
+          "macro_f1": 0.608,
+          "fallback_rate": 0.683
+        },
+        "0.4": {
+          "accuracy": 0.846,
+          "fault_only_accuracy": 0.816,
+          "false_alarm_rate": 0.071,
+          "macro_precision": 0.592,
+          "macro_recall": 0.645,
+          "macro_f1": 0.608,
+          "fallback_rate": 0.683
+        },
+        "0.45": {
+          "accuracy": 0.846,
+          "fault_only_accuracy": 0.816,
+          "false_alarm_rate": 0.071,
+          "macro_precision": 0.592,
+          "macro_recall": 0.645,
+          "macro_f1": 0.608,
+          "fallback_rate": 0.683
+        },
+        "0.5": {
+          "accuracy": 0.846,
+          "fault_only_accuracy": 0.816,
+          "false_alarm_rate": 0.071,
+          "macro_precision": 0.592,
+          "macro_recall": 0.645,
+          "macro_f1": 0.608,
+          "fallback_rate": 0.683
+        },
+        "0.6": {
+          "accuracy": 0.846,
+          "fault_only_accuracy": 0.816,
+          "false_alarm_rate": 0.071,
+          "macro_precision": 0.592,
+          "macro_recall": 0.645,
+          "macro_f1": 0.608,
+          "fallback_rate": 0.683
+        }
+      }
+    },
+    "source:LBNL Boiler": {
+      "samples": 13,
+      "grid": {
+        "0.2": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.538
+        },
+        "0.3": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.35": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.4": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.45": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.5": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.6": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        }
+      }
+    },
+    "source:LBNL Chiller": {
+      "samples": 13,
+      "grid": {
+        "0.2": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.308
+        },
+        "0.3": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.35": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.4": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.45": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.5": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.6": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        }
+      }
+    },
+    "source:LBNL RTU": {
+      "samples": 18,
+      "grid": {
+        "0.2": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.3": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.35": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.4": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.45": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.5": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.6": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        }
+      }
+    },
+    "source:MetroPT": {
+      "samples": 60,
+      "grid": {
+        "0.2": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.683
+        },
+        "0.3": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.35": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.4": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.45": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.5": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.6": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        }
+      }
+    },
+    "equipment:LBNL Boiler Plant": {
+      "samples": 13,
+      "grid": {
+        "0.2": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.538
+        },
+        "0.3": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.35": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.4": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.45": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.5": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        },
+        "0.6": {
+          "accuracy": 0.923,
+          "fault_only_accuracy": 0.917,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 1.0,
+          "macro_recall": 0.933,
+          "macro_f1": 0.96,
+          "fallback_rate": 0.846
+        }
+      }
+    },
+    "equipment:LBNL Chiller Plant": {
+      "samples": 13,
+      "grid": {
+        "0.2": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.308
+        },
+        "0.3": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.35": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.4": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.45": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.5": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        },
+        "0.6": {
+          "accuracy": 0.538,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.381,
+          "macro_recall": 0.429,
+          "macro_f1": 0.4,
+          "fallback_rate": 0.538
+        }
+      }
+    },
+    "equipment:LBNL RTU": {
+      "samples": 18,
+      "grid": {
+        "0.2": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.3": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.35": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.4": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.45": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.5": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        },
+        "0.6": {
+          "accuracy": 0.667,
+          "fault_only_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "macro_precision": 0.281,
+          "macro_recall": 0.5,
+          "macro_f1": 0.359,
+          "fallback_rate": 0.611
+        }
+      }
+    },
+    "equipment:MetroPT Compressor": {
+      "samples": 60,
+      "grid": {
+        "0.2": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.683
+        },
+        "0.3": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.35": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.4": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.45": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.5": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        },
+        "0.6": {
+          "accuracy": 0.95,
+          "fault_only_accuracy": 0.975,
+          "false_alarm_rate": 0.1,
+          "macro_precision": 0.935,
+          "macro_recall": 0.975,
+          "macro_f1": 0.952,
+          "fallback_rate": 0.7
+        }
+      }
+    }
+  },
+  "total_samples": 104,
+  "api_calls": 0,
+  "llm_evaluated_samples": 104,
+  "llm_evaluation_rate": 1.0,
+  "fallback_rate": 0.673,
+  "predicate_coverage": {
+    "min_match": 66.66,
+    "min_match_by_equipment": {
+      "LBNL Boiler Plant": 66.66,
+      "LBNL Chiller Plant": 66.66,
+      "LBNL RTU": 50.0,
+      "MetroPT Compressor": 66.66
+    },
+    "overall_activation_coverage": 1.0,
+    "overall_fullmatch_coverage": 0.9994,
+    "by_equipment": {
+      "LBNL Boiler Plant": {
+        "predicates": 7,
+        "min_match": 66.66,
+        "feasible_states": 2187,
+        "activated_states": 2187,
+        "activation_coverage": 1.0,
+        "fullmatch_states": 2179,
+        "fullmatch_coverage": 0.9963,
+        "faults_reached": [
+          "Boiler fouling",
+          "Boiler performance degradation",
+          "Boiler sensor/control bias",
+          "Hot water pressure sensor bias",
+          "Hot water temperature sensor bias",
+          "Normal"
+        ],
+        "abnormal_faults_reached": [
+          "Boiler fouling",
+          "Boiler performance degradation",
+          "Boiler sensor/control bias",
+          "Hot water pressure sensor bias",
+          "Hot water temperature sensor bias"
+        ],
+        "normal_reached": true,
+        "fault_class_coverage": 1.0
+      },
+      "LBNL Chiller Plant": {
+        "predicates": 11,
+        "min_match": 66.66,
+        "feasible_states": 177147,
+        "activated_states": 177139,
+        "activation_coverage": 1.0,
+        "fullmatch_states": 177094,
+        "fullmatch_coverage": 0.9997,
+        "faults_reached": [
+          "Bypass valve leakage or stuck",
+          "Chiller fouling",
+          "Chiller sensor bias",
+          "Cooling tower fouling",
+          "Cooling tower performance degradation",
+          "Cooling tower sensor bias",
+          "Normal",
+          "Secondary chilled water pressure sensor bias"
+        ],
+        "abnormal_faults_reached": [
+          "Bypass valve leakage or stuck",
+          "Chiller fouling",
+          "Chiller sensor bias",
+          "Cooling tower fouling",
+          "Cooling tower performance degradation",
+          "Cooling tower sensor bias",
+          "Secondary chilled water pressure sensor bias"
+        ],
+        "normal_reached": true,
+        "fault_class_coverage": 1.0
+      },
+      "LBNL RTU": {
+        "predicates": 7,
+        "min_match": 50.0,
+        "feasible_states": 2187,
+        "activated_states": 2187,
+        "activation_coverage": 1.0,
+        "fullmatch_states": 2161,
+        "fullmatch_coverage": 0.9881,
+        "faults_reached": [
+          "Compressor staging or cooling capacity fault",
+          "Economizer setpoint bias",
+          "Normal",
+          "Outdoor air damper fault",
+          "Refrigerant undercharge"
+        ],
+        "abnormal_faults_reached": [
+          "Compressor staging or cooling capacity fault",
+          "Economizer setpoint bias",
+          "Outdoor air damper fault",
+          "Refrigerant undercharge"
+        ],
+        "normal_reached": true,
+        "fault_class_coverage": 1.0
+      },
+      "MetroPT Compressor": {
+        "predicates": 12,
+        "min_match": 66.66,
+        "feasible_states": 531441,
+        "activated_states": 531441,
+        "activation_coverage": 1.0,
+        "fullmatch_states": 531091,
+        "fullmatch_coverage": 0.9993,
+        "faults_reached": [
+          "Air Leak",
+          "Compressor control abnormality",
+          "Normal",
+          "Oil Leak"
+        ],
+        "abnormal_faults_reached": [
+          "Air Leak",
+          "Compressor control abnormality",
+          "Oil Leak"
+        ],
+        "normal_reached": true,
+        "fault_class_coverage": 1.0
+      }
+    }
+  },
+  "metropt_time_to_detection": {
+    "Air Leak": {
+      "event_start": "2022-06-04 10:19:24.300000",
+      "invalid_timestamp_records": 0,
+      "expert_minutes": 9.92,
+      "llm_minutes": 0.0,
+      "hybrid_minutes": 0.0
+    },
+    "Oil Leak": {
+      "event_start": "2022-07-11 10:10:18.948000",
+      "invalid_timestamp_records": 0,
+      "expert_minutes": 0.01,
+      "llm_minutes": 0.01,
+      "hybrid_minutes": 0.01
+    }
+  },
+  "expert": {
+    "accuracy": 0.808,
+    "fault_only_accuracy": 0.763,
+    "false_alarm_rate": 0.071,
+    "macro_precision": 0.584,
+    "macro_recall": 0.626,
+    "macro_f1": 0.594
+  },
+  "llm": {
+    "accuracy": 0.856,
+    "fault_only_accuracy": 0.855,
+    "false_alarm_rate": 0.143,
+    "macro_precision": 0.867,
+    "macro_recall": 0.867,
+    "macro_f1": 0.867
+  },
+  "llm_evaluated_subset": {
+    "accuracy": 0.856,
+    "fault_only_accuracy": 0.855,
+    "false_alarm_rate": 0.143,
+    "macro_precision": 0.867,
+    "macro_recall": 0.867,
+    "macro_f1": 0.867
+  },
+  "llm_on_fallback_needed": {
+    "accuracy": 0.857,
+    "fault_only_accuracy": 0.855,
+    "false_alarm_rate": 0.0,
+    "macro_precision": 0.873,
+    "macro_recall": 0.873,
+    "macro_f1": 0.873
+  },
+  "legacy_hybrid": {
+    "accuracy": 0.827,
+    "fault_only_accuracy": 0.789,
+    "false_alarm_rate": 0.071,
+    "macro_precision": 0.727,
+    "macro_recall": 0.673,
+    "macro_f1": 0.693
+  },
+  "hybrid": {
+    "accuracy": 0.846,
+    "fault_only_accuracy": 0.816,
+    "false_alarm_rate": 0.071,
+    "macro_precision": 0.592,
+    "macro_recall": 0.645,
+    "macro_f1": 0.608
+  },
+  "expert_ece": 0.5358,
+  "llm_ece": 0.2511,
+  "legacy_hybrid_ece": 0.2321,
+  "hybrid_ece": 0.2635,
+  "arbitration_actions": {
+    "expert_high_conf": {
+      "samples": 23,
+      "hybrid": {
+        "accuracy": 0.957,
+        "fault_only_accuracy": 0.0,
+        "false_alarm_rate": 0.043,
+        "macro_precision": 0.0,
+        "macro_recall": 0.0,
+        "macro_f1": 0.0
+      }
+    },
+    "expert_llm_agree": {
+      "samples": 46,
+      "hybrid": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      }
+    },
+    "expert_moderate_evidence": {
+      "samples": 5,
+      "hybrid": {
+        "accuracy": 0.4,
+        "fault_only_accuracy": 0.25,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.333,
+        "macro_recall": 0.333,
+        "macro_f1": 0.333
+      }
+    },
+    "expert_no_evidence": {
+      "samples": 10,
+      "hybrid": {
+        "accuracy": 0.3,
+        "fault_only_accuracy": 0.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.0,
+        "macro_recall": 0.0,
+        "macro_f1": 0.0
+      }
+    },
+    "expert_no_llm": {
+      "samples": 1,
+      "hybrid": {
+        "accuracy": 0.0,
+        "fault_only_accuracy": 0.0,
+        "false_alarm_rate": 1.0,
+        "macro_precision": 0.0,
+        "macro_recall": 0.0,
+        "macro_f1": 0.0
+      }
+    },
+    "expert_weak_evidence": {
+      "samples": 4,
+      "hybrid": {
+        "accuracy": 0.5,
+        "fault_only_accuracy": 0.5,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.333,
+        "macro_recall": 0.5,
+        "macro_f1": 0.4
+      }
+    },
+    "llm_override_strong": {
+      "samples": 4,
+      "hybrid": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      }
+    },
+    "llm_rejected_low_conf": {
+      "samples": 11,
+      "hybrid": {
+        "accuracy": 0.818,
+        "fault_only_accuracy": 0.818,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.575,
+        "macro_recall": 0.6,
+        "macro_f1": 0.587
+      }
+    }
+  },
+  "by_source": {
+    "LBNL Boiler": {
+      "samples": 13,
+      "fallback_rate": 0.846,
+      "expert": {
+        "accuracy": 0.923,
+        "fault_only_accuracy": 0.917,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 0.933,
+        "macro_f1": 0.96
+      },
+      "llm": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "llm_evaluated_subset": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "llm_on_fallback_needed": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "legacy_hybrid": {
+        "accuracy": 0.923,
+        "fault_only_accuracy": 0.917,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 0.933,
+        "macro_f1": 0.96
+      },
+      "hybrid": {
+        "accuracy": 0.923,
+        "fault_only_accuracy": 0.917,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 0.933,
+        "macro_f1": 0.96
+      },
+      "expert_ece": 0.781,
+      "llm_ece": 0.2118,
+      "legacy_hybrid_ece": 0.2383,
+      "hybrid_ece": 0.2887,
+      "arbitration_actions": {
+        "expert_high_conf": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_llm_agree": {
+          "samples": 10,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        },
+        "expert_moderate_evidence": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        },
+        "expert_no_evidence": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 0.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        }
+      }
+    },
+    "LBNL Chiller": {
+      "samples": 13,
+      "fallback_rate": 0.538,
+      "expert": {
+        "accuracy": 0.538,
+        "fault_only_accuracy": 0.5,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.381,
+        "macro_recall": 0.429,
+        "macro_f1": 0.4
+      },
+      "llm": {
+        "accuracy": 0.846,
+        "fault_only_accuracy": 0.833,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.857,
+        "macro_recall": 0.857,
+        "macro_f1": 0.857
+      },
+      "llm_evaluated_subset": {
+        "accuracy": 0.846,
+        "fault_only_accuracy": 0.833,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.857,
+        "macro_recall": 0.857,
+        "macro_f1": 0.857
+      },
+      "llm_on_fallback_needed": {
+        "accuracy": 0.857,
+        "fault_only_accuracy": 0.857,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.875,
+        "macro_recall": 0.875,
+        "macro_f1": 0.875
+      },
+      "legacy_hybrid": {
+        "accuracy": 0.538,
+        "fault_only_accuracy": 0.5,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.5,
+        "macro_recall": 0.429,
+        "macro_f1": 0.452
+      },
+      "hybrid": {
+        "accuracy": 0.538,
+        "fault_only_accuracy": 0.5,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.381,
+        "macro_recall": 0.429,
+        "macro_f1": 0.4
+      },
+      "expert_ece": 0.7359,
+      "llm_ece": 0.2975,
+      "legacy_hybrid_ece": 0.5314,
+      "hybrid_ece": 0.564,
+      "arbitration_actions": {
+        "expert_high_conf": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_llm_agree": {
+          "samples": 5,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        },
+        "expert_no_evidence": {
+          "samples": 5,
+          "hybrid": {
+            "accuracy": 0.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "llm_rejected_low_conf": {
+          "samples": 2,
+          "hybrid": {
+            "accuracy": 0.5,
+            "fault_only_accuracy": 0.5,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.5,
+            "macro_recall": 0.5,
+            "macro_f1": 0.5
+          }
+        }
+      }
+    },
+    "LBNL RTU": {
+      "samples": 18,
+      "fallback_rate": 0.611,
+      "expert": {
+        "accuracy": 0.611,
+        "fault_only_accuracy": 0.417,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.268,
+        "macro_recall": 0.45,
+        "macro_f1": 0.333
+      },
+      "llm": {
+        "accuracy": 0.889,
+        "fault_only_accuracy": 0.917,
+        "false_alarm_rate": 0.167,
+        "macro_precision": 0.75,
+        "macro_recall": 0.75,
+        "macro_f1": 0.75
+      },
+      "llm_evaluated_subset": {
+        "accuracy": 0.889,
+        "fault_only_accuracy": 0.917,
+        "false_alarm_rate": 0.167,
+        "macro_precision": 0.75,
+        "macro_recall": 0.75,
+        "macro_f1": 0.75
+      },
+      "llm_on_fallback_needed": {
+        "accuracy": 0.909,
+        "fault_only_accuracy": 0.909,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.75,
+        "macro_recall": 0.75,
+        "macro_f1": 0.75
+      },
+      "legacy_hybrid": {
+        "accuracy": 0.889,
+        "fault_only_accuracy": 0.833,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.75,
+        "macro_recall": 0.7,
+        "macro_f1": 0.722
+      },
+      "hybrid": {
+        "accuracy": 0.667,
+        "fault_only_accuracy": 0.5,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.281,
+        "macro_recall": 0.5,
+        "macro_f1": 0.359
+      },
+      "expert_ece": 0.2738,
+      "llm_ece": 0.2131,
+      "legacy_hybrid_ece": 0.1814,
+      "hybrid_ece": 0.2332,
+      "arbitration_actions": {
+        "expert_high_conf": {
+          "samples": 5,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_llm_agree": {
+          "samples": 2,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        },
+        "expert_moderate_evidence": {
+          "samples": 3,
+          "hybrid": {
+            "accuracy": 0.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_no_evidence": {
+          "samples": 2,
+          "hybrid": {
+            "accuracy": 0.5,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_weak_evidence": {
+          "samples": 4,
+          "hybrid": {
+            "accuracy": 0.5,
+            "fault_only_accuracy": 0.5,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.333,
+            "macro_recall": 0.5,
+            "macro_f1": 0.4
+          }
+        },
+        "llm_override_strong": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        },
+        "llm_rejected_low_conf": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        }
+      }
+    },
+    "MetroPT": {
+      "samples": 60,
+      "fallback_rate": 0.683,
+      "expert": {
+        "accuracy": 0.9,
+        "fault_only_accuracy": 0.9,
+        "false_alarm_rate": 0.1,
+        "macro_precision": 0.885,
+        "macro_recall": 0.9,
+        "macro_f1": 0.879
+      },
+      "llm": {
+        "accuracy": 0.817,
+        "fault_only_accuracy": 0.8,
+        "false_alarm_rate": 0.15,
+        "macro_precision": 0.8,
+        "macro_recall": 0.8,
+        "macro_f1": 0.8
+      },
+      "llm_evaluated_subset": {
+        "accuracy": 0.817,
+        "fault_only_accuracy": 0.8,
+        "false_alarm_rate": 0.15,
+        "macro_precision": 0.8,
+        "macro_recall": 0.8,
+        "macro_f1": 0.8
+      },
+      "llm_on_fallback_needed": {
+        "accuracy": 0.805,
+        "fault_only_accuracy": 0.8,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.8,
+        "macro_recall": 0.8,
+        "macro_f1": 0.8
+      },
+      "legacy_hybrid": {
+        "accuracy": 0.85,
+        "fault_only_accuracy": 0.825,
+        "false_alarm_rate": 0.1,
+        "macro_precision": 0.793,
+        "macro_recall": 0.825,
+        "macro_f1": 0.808
+      },
+      "hybrid": {
+        "accuracy": 0.95,
+        "fault_only_accuracy": 0.975,
+        "false_alarm_rate": 0.1,
+        "macro_precision": 0.935,
+        "macro_recall": 0.975,
+        "macro_f1": 0.952
+      },
+      "expert_ece": 0.5309,
+      "llm_ece": 0.2611,
+      "legacy_hybrid_ece": 0.1951,
+      "hybrid_ece": 0.2324,
+      "arbitration_actions": {
+        "expert_high_conf": {
+          "samples": 16,
+          "hybrid": {
+            "accuracy": 0.938,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.062,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_llm_agree": {
+          "samples": 29,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        },
+        "expert_moderate_evidence": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_no_evidence": {
+          "samples": 2,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_no_llm": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 0.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 1.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "llm_override_strong": {
+          "samples": 3,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        },
+        "llm_rejected_low_conf": {
+          "samples": 8,
+          "hybrid": {
+            "accuracy": 0.875,
+            "fault_only_accuracy": 0.875,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.438,
+            "macro_recall": 0.5,
+            "macro_f1": 0.467
+          }
+        }
+      }
+    }
+  },
+  "metrics_by_evidence": {
+    "none": {
+      "samples": 27,
+      "expert": {
+        "accuracy": 0.741,
+        "fault_only_accuracy": 0.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.0,
+        "macro_recall": 0.0,
+        "macro_f1": 0.0
+      },
+      "llm": {
+        "accuracy": 0.852,
+        "fault_only_accuracy": 0.857,
+        "false_alarm_rate": 0.15,
+        "macro_precision": 0.917,
+        "macro_recall": 0.917,
+        "macro_f1": 0.917
+      },
+      "llm_evaluated_subset": {
+        "accuracy": 0.852,
+        "fault_only_accuracy": 0.857,
+        "false_alarm_rate": 0.15,
+        "macro_precision": 0.917,
+        "macro_recall": 0.917,
+        "macro_f1": 0.917
+      },
+      "llm_on_fallback_needed": {},
+      "legacy_hybrid": {
+        "accuracy": 0.741,
+        "fault_only_accuracy": 0.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.0,
+        "macro_recall": 0.0,
+        "macro_f1": 0.0
+      },
+      "hybrid": {
+        "accuracy": 0.741,
+        "fault_only_accuracy": 0.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.0,
+        "macro_recall": 0.0,
+        "macro_f1": 0.0
+      },
+      "arbitration_actions": {
+        "expert_high_conf": {
+          "samples": 17,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_no_evidence": {
+          "samples": 10,
+          "hybrid": {
+            "accuracy": 0.3,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        }
+      }
+    },
+    "weak": {
+      "samples": 5,
+      "expert": {
+        "accuracy": 0.6,
+        "fault_only_accuracy": 0.5,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.333,
+        "macro_recall": 0.5,
+        "macro_f1": 0.4
+      },
+      "llm": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "llm_evaluated_subset": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "llm_on_fallback_needed": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "legacy_hybrid": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "hybrid": {
+        "accuracy": 0.6,
+        "fault_only_accuracy": 0.5,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.333,
+        "macro_recall": 0.5,
+        "macro_f1": 0.4
+      },
+      "arbitration_actions": {
+        "expert_high_conf": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_weak_evidence": {
+          "samples": 4,
+          "hybrid": {
+            "accuracy": 0.5,
+            "fault_only_accuracy": 0.5,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.333,
+            "macro_recall": 0.5,
+            "macro_f1": 0.4
+          }
+        }
+      }
+    },
+    "moderate": {
+      "samples": 10,
+      "expert": {
+        "accuracy": 0.5,
+        "fault_only_accuracy": 0.25,
+        "false_alarm_rate": 0.333,
+        "macro_precision": 0.333,
+        "macro_recall": 0.333,
+        "macro_f1": 0.333
+      },
+      "llm": {
+        "accuracy": 0.9,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.167,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "llm_evaluated_subset": {
+        "accuracy": 0.9,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.167,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "llm_on_fallback_needed": {
+        "accuracy": 1.0,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "legacy_hybrid": {
+        "accuracy": 0.8,
+        "fault_only_accuracy": 1.0,
+        "false_alarm_rate": 0.333,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0
+      },
+      "hybrid": {
+        "accuracy": 0.5,
+        "fault_only_accuracy": 0.25,
+        "false_alarm_rate": 0.333,
+        "macro_precision": 0.333,
+        "macro_recall": 0.333,
+        "macro_f1": 0.333
+      },
+      "arbitration_actions": {
+        "expert_high_conf": {
+          "samples": 4,
+          "hybrid": {
+            "accuracy": 0.75,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.25,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_moderate_evidence": {
+          "samples": 5,
+          "hybrid": {
+            "accuracy": 0.4,
+            "fault_only_accuracy": 0.25,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.333,
+            "macro_recall": 0.333,
+            "macro_f1": 0.333
+          }
+        },
+        "expert_no_llm": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 0.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 1.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        }
+      }
+    },
+    "strong": {
+      "samples": 62,
+      "expert": {
+        "accuracy": 0.903,
+        "fault_only_accuracy": 0.902,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.859,
+        "macro_recall": 0.882,
+        "macro_f1": 0.867
+      },
+      "llm": {
+        "accuracy": 0.839,
+        "fault_only_accuracy": 0.836,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.854,
+        "macro_recall": 0.854,
+        "macro_f1": 0.854
+      },
+      "llm_evaluated_subset": {
+        "accuracy": 0.839,
+        "fault_only_accuracy": 0.836,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.854,
+        "macro_recall": 0.854,
+        "macro_f1": 0.854
+      },
+      "llm_on_fallback_needed": {
+        "accuracy": 0.836,
+        "fault_only_accuracy": 0.836,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.854,
+        "macro_recall": 0.854,
+        "macro_f1": 0.854
+      },
+      "legacy_hybrid": {
+        "accuracy": 0.855,
+        "fault_only_accuracy": 0.852,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.858,
+        "macro_recall": 0.858,
+        "macro_f1": 0.858
+      },
+      "hybrid": {
+        "accuracy": 0.968,
+        "fault_only_accuracy": 0.967,
+        "false_alarm_rate": 0.0,
+        "macro_precision": 0.894,
+        "macro_recall": 0.919,
+        "macro_f1": 0.904
+      },
+      "arbitration_actions": {
+        "expert_high_conf": {
+          "samples": 1,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 0.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0
+          }
+        },
+        "expert_llm_agree": {
+          "samples": 46,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        },
+        "llm_override_strong": {
+          "samples": 4,
+          "hybrid": {
+            "accuracy": 1.0,
+            "fault_only_accuracy": 1.0,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 1.0,
+            "macro_recall": 1.0,
+            "macro_f1": 1.0
+          }
+        },
+        "llm_rejected_low_conf": {
+          "samples": 11,
+          "hybrid": {
+            "accuracy": 0.818,
+            "fault_only_accuracy": 0.818,
+            "false_alarm_rate": 0.0,
+            "macro_precision": 0.575,
+            "macro_recall": 0.6,
+            "macro_f1": 0.587
+          }
+        }
+      }
+    }
+  }
+}

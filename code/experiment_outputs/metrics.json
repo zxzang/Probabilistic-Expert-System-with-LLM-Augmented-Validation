@@ -1,17 +1,17 @@
 {
   "coverage": {
-    "Boiler": 15.8,
-    "Chiller": 36.3,
-    "HVAC": 32.9,
-    "Air Compressor": 13.0,
-    "Vacuum Machine": 45.7,
-    "Power Distribution": 67.3,
-    "Water Supply": 32.6
+    "Boiler": 97.05,
+    "Chiller": 99.3,
+    "HVAC": 83.25,
+    "Air Compressor": 96.65,
+    "Vacuum Machine": 96.55,
+    "Power Distribution": 100.0,
+    "Water Supply": 75.35
   },
   "accuracy": {
-    "expert": 0.9320952380952381,
-    "llm": 0.8469523809523809,
-    "hybrid": 0.8612380952380952
+    "expert": 0.9333333333333333,
+    "llm": 0.8535238095238096,
+    "hybrid": 0.8618095238095238
   },
   "total_samples": 10500
 }

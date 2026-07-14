@@ -1,0 +1,40 @@
+{
+  "configuration": {
+    "sample_size": 100,
+    "samples_per_equipment": 120,
+    "noise_levels": [
+      0.0,
+      0.05,
+      0.1
+    ],
+    "partial_ratio": 0.0,
+    "fault_only": true,
+    "tau": 0.6,
+    "seed": 42,
+    "progress_every": 10,
+    "prompt_mode": "rule-guided"
+  },
+  "total_samples": 100,
+  "expert": {
+    "accuracy": 0.95,
+    "fault_only_accuracy": 0.95,
+    "macro_precision": 0.97,
+    "macro_recall": 0.9316,
+    "macro_f1": 0.947
+  },
+  "real_llm": {
+    "accuracy": 0.93,
+    "fault_only_accuracy": 0.93,
+    "macro_precision": 0.913,
+    "macro_recall": 0.924,
+    "macro_f1": 0.9124
+  },
+  "hybrid": {
+    "accuracy": 0.96,
+    "fault_only_accuracy": 0.96,
+    "macro_precision": 0.9608,
+    "macro_recall": 0.9387,
+    "macro_f1": 0.9461
+  },
+  "llm_errors": 0
+}

@@ -2,91 +2,91 @@
   "Boolean (100%)": {
     "normal": {
       "total": 6930,
-      "expert_correct": 6656,
-      "hybrid_correct": 5627,
-      "expert_acc": 0.9605,
-      "hybrid_acc": 0.812
+      "expert_correct": 6655,
+      "hybrid_correct": 5694,
+      "expert_acc": 0.9603,
+      "hybrid_acc": 0.8216
     },
     "fault": {
       "total": 3570,
-      "expert_correct": 3131,
-      "hybrid_correct": 3376,
-      "expert_acc": 0.877,
-      "hybrid_acc": 0.9457
+      "expert_correct": 3159,
+      "hybrid_correct": 3386,
+      "expert_acc": 0.8849,
+      "hybrid_acc": 0.9485
     },
     "partial_fault": {
       "total": 1745,
-      "expert_correct": 4,
-      "hybrid_correct": 948,
-      "expert_acc": 0.0023,
-      "hybrid_acc": 0.5433
+      "expert_correct": 0,
+      "hybrid_correct": 970,
+      "expert_acc": 0.0,
+      "hybrid_acc": 0.5559
     },
     "overall": {
       "total": 12245,
-      "expert_correct": 9791,
-      "hybrid_correct": 9951,
-      "expert_acc": 0.7996,
-      "hybrid_acc": 0.8127
+      "expert_correct": 9814,
+      "hybrid_correct": 10050,
+      "expert_acc": 0.8015,
+      "hybrid_acc": 0.8207
     }
   },
   "PMS-75%": {
     "normal": {
       "total": 6930,
-      "expert_correct": 6656,
-      "hybrid_correct": 5689,
-      "expert_acc": 0.9605,
-      "hybrid_acc": 0.8209
+      "expert_correct": 6655,
+      "hybrid_correct": 5694,
+      "expert_acc": 0.9603,
+      "hybrid_acc": 0.8216
     },
     "fault": {
       "total": 3570,
-      "expert_correct": 3131,
-      "hybrid_correct": 3391,
-      "expert_acc": 0.877,
-      "hybrid_acc": 0.9499
+      "expert_correct": 3159,
+      "hybrid_correct": 3386,
+      "expert_acc": 0.8849,
+      "hybrid_acc": 0.9485
     },
     "partial_fault": {
       "total": 1745,
-      "expert_correct": 4,
-      "hybrid_correct": 967,
-      "expert_acc": 0.0023,
-      "hybrid_acc": 0.5542
+      "expert_correct": 0,
+      "hybrid_correct": 970,
+      "expert_acc": 0.0,
+      "hybrid_acc": 0.5559
     },
     "overall": {
       "total": 12245,
-      "expert_correct": 9791,
-      "hybrid_correct": 10047,
-      "expert_acc": 0.7996,
-      "hybrid_acc": 0.8205
+      "expert_correct": 9814,
+      "hybrid_correct": 10050,
+      "expert_acc": 0.8015,
+      "hybrid_acc": 0.8207
     }
   },
   "PMS-50%": {
     "normal": {
       "total": 6930,
-      "expert_correct": 1223,
-      "hybrid_correct": 1049,
-      "expert_acc": 0.1765,
-      "hybrid_acc": 0.1514
+      "expert_correct": 1184,
+      "hybrid_correct": 1031,
+      "expert_acc": 0.1709,
+      "hybrid_acc": 0.1488
     },
     "fault": {
       "total": 3570,
-      "expert_correct": 3229,
-      "hybrid_correct": 3321,
-      "expert_acc": 0.9045,
-      "hybrid_acc": 0.9303
+      "expert_correct": 3257,
+      "hybrid_correct": 3314,
+      "expert_acc": 0.9123,
+      "hybrid_acc": 0.9283
     },
     "partial_fault": {
       "total": 1745,
-      "expert_correct": 648,
-      "hybrid_correct": 789,
-      "expert_acc": 0.3713,
-      "hybrid_acc": 0.4521
+      "expert_correct": 638,
+      "hybrid_correct": 758,
+      "expert_acc": 0.3656,
+      "hybrid_acc": 0.4344
     },
     "overall": {
       "total": 12245,
-      "expert_correct": 5100,
-      "hybrid_correct": 5159,
-      "expert_acc": 0.4165,
-      "hybrid_acc": 0.4213
+      "expert_correct": 5079,
+      "hybrid_correct": 5103,
+      "expert_acc": 0.4148,
+      "hybrid_acc": 0.4167
     }
   }
 }

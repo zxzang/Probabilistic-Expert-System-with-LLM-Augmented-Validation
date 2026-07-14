@@ -1,115 +1,115 @@
 {
   "overall": {
     "expert": {
-      "accuracy": 0.932,
-      "fault_only_accuracy": 0.869,
-      "macro_precision": 0.825,
-      "macro_recall": 0.824,
-      "macro_f1": 0.809,
+      "accuracy": 0.933,
+      "fault_only_accuracy": 0.881,
+      "macro_precision": 0.829,
+      "macro_recall": 0.828,
+      "macro_f1": 0.814,
       "ece": 0.146
     },
     "llm": {
-      "accuracy": 0.847,
-      "fault_only_accuracy": 0.841,
-      "macro_precision": 1.0,
-      "macro_recall": 0.855,
-      "macro_f1": 0.92
+      "accuracy": 0.854,
+      "fault_only_accuracy": 0.858,
+      "macro_precision": 0.854,
+      "macro_recall": 0.854,
+      "macro_f1": 0.854
     },
     "hybrid": {
-      "accuracy": 0.861,
-      "fault_only_accuracy": 0.94,
-      "macro_precision": 0.843,
-      "macro_recall": 0.914,
-      "macro_f1": 0.861,
-      "ece": 0.193
+      "accuracy": 0.862,
+      "fault_only_accuracy": 0.946,
+      "macro_precision": 0.829,
+      "macro_recall": 0.912,
+      "macro_f1": 0.855,
+      "ece": 0.182
     }
   },
   "per_equipment": {
     "Air Compressor": {
-      "accuracy": 0.849,
-      "precision": 0.74,
-      "recall": 0.904,
-      "f1": 0.785
+      "accuracy": 0.844,
+      "precision": 0.73,
+      "recall": 0.888,
+      "f1": 0.801
     },
     "Boiler": {
-      "accuracy": 0.859,
-      "precision": 0.779,
-      "recall": 0.925,
-      "f1": 0.811
+      "accuracy": 0.847,
+      "precision": 0.719,
+      "recall": 0.935,
+      "f1": 0.763
     },
     "Chiller": {
-      "accuracy": 0.848,
-      "precision": 0.905,
-      "recall": 0.91,
-      "f1": 0.904
+      "accuracy": 0.877,
+      "precision": 0.879,
+      "recall": 0.93,
+      "f1": 0.903
     },
     "HVAC": {
-      "accuracy": 0.851,
-      "precision": 0.895,
-      "recall": 0.927,
-      "f1": 0.907
+      "accuracy": 0.859,
+      "precision": 0.857,
+      "recall": 0.936,
+      "f1": 0.895
     },
     "Power Distribution": {
-      "accuracy": 0.903,
-      "precision": 0.931,
-      "recall": 0.895,
-      "f1": 0.909
+      "accuracy": 0.897,
+      "precision": 0.89,
+      "recall": 0.968,
+      "f1": 0.926
     },
     "Vacuum Machine": {
-      "accuracy": 0.839,
-      "precision": 0.902,
-      "recall": 0.808,
-      "f1": 0.838
+      "accuracy": 0.831,
+      "precision": 0.872,
+      "recall": 0.79,
+      "f1": 0.81
     },
     "Water Supply": {
-      "accuracy": 0.881,
-      "precision": 0.956,
-      "recall": 0.901,
-      "f1": 0.926
+      "accuracy": 0.877,
+      "precision": 0.893,
+      "recall": 0.937,
+      "f1": 0.914
     }
   },
   "sensitivity": {
     "0.3": {
-      "accuracy": 0.861,
-      "fault_only_accuracy": 0.939,
-      "macro_recall": 0.912,
-      "ece": 0.191
+      "accuracy": 0.862,
+      "fault_only_accuracy": 0.946,
+      "macro_recall": 0.911,
+      "ece": 0.18
     },
     "0.4": {
-      "accuracy": 0.861,
-      "fault_only_accuracy": 0.94,
-      "macro_recall": 0.914,
-      "ece": 0.193
+      "accuracy": 0.862,
+      "fault_only_accuracy": 0.946,
+      "macro_recall": 0.912,
+      "ece": 0.182
     },
     "0.5": {
-      "accuracy": 0.861,
-      "fault_only_accuracy": 0.94,
-      "macro_recall": 0.914,
-      "ece": 0.193
+      "accuracy": 0.862,
+      "fault_only_accuracy": 0.946,
+      "macro_recall": 0.912,
+      "ece": 0.182
     },
     "0.6": {
-      "accuracy": 0.861,
-      "fault_only_accuracy": 0.94,
-      "macro_recall": 0.914,
-      "ece": 0.193
+      "accuracy": 0.862,
+      "fault_only_accuracy": 0.946,
+      "macro_recall": 0.912,
+      "ece": 0.182
     },
     "0.7": {
-      "accuracy": 0.861,
-      "fault_only_accuracy": 0.94,
-      "macro_recall": 0.914,
-      "ece": 0.193
+      "accuracy": 0.862,
+      "fault_only_accuracy": 0.946,
+      "macro_recall": 0.912,
+      "ece": 0.182
     },
     "0.8": {
-      "accuracy": 0.861,
-      "fault_only_accuracy": 0.94,
-      "macro_recall": 0.914,
-      "ece": 0.193
+      "accuracy": 0.862,
+      "fault_only_accuracy": 0.946,
+      "macro_recall": 0.912,
+      "ece": 0.182
     },
     "0.9": {
-      "accuracy": 0.861,
-      "fault_only_accuracy": 0.94,
-      "macro_recall": 0.914,
-      "ece": 0.193
+      "accuracy": 0.862,
+      "fault_only_accuracy": 0.946,
+      "macro_recall": 0.912,
+      "ece": 0.182
     }
   }
 }
