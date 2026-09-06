@@ -620,13 +620,13 @@ If you use this code in your research, please cite:
 @article{zang2026probabilistic,
   title   = {Enhancing Industrial Fault Diagnosis: A Probabilistic Expert
              System with LLM-Augmented Validation},
-  author  = {[Yunping Li, Xin Tang, Yinbo Dai, Hongyu Gao, Liyu Qian, Zhaoxiang Zang]},
+  author  = {Yunping Li, Xin Tang, Yinbo Dai, Hongyu Gao, Liyu Qian, Zhaoxiang Zang*},
   journal = {IEEE Access},
   year    = {2026},
-  volume={14},
-  pages={119257-119272},
-  keywords={Large language models;Modeling;Expert systems;Accuracy;Labeling;Fault diagnosis;Medical diagnosis;Routing;Boilers;Timing;Industrial fault diagnosis;predictive maintenance;probabilistic expert system;large language models;neuro-symbolic AI;rule coverage analysis;fallback validation},
-  doi={10.1109/ACCESS.2026.3719708}
+  volume  = {14},
+  pages   = {119257-119272},
+  keywords= {Large language models;Modeling;Expert systems;Accuracy;Labeling;Fault diagnosis;Medical diagnosis;Routing;Boilers;Timing;Industrial fault diagnosis;predictive maintenance;probabilistic expert system;large language models;neuro-symbolic AI;rule coverage analysis;fallback validation},
+  doi     = {10.1109/ACCESS.2026.3719708}
 }
 ```
 
